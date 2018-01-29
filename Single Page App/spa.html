@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <style type="text/css">
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #777;
+        }
+        
+        #spa {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            bottom: 8px;
+            right: 8px;
+            border-radius: 8px 8px 0px 8px;
+            background-color: #fff;
+        }
+        
+        .spa-slider {
+            position: absolute;
+            bottom: 0;
+            right: 2px;
+            width: 300px;
+            height: 16px;
+            cursor: pointer;
+            border-radius: 8px 0 0 0;
+            background-color: #cecece;
+        }
+    </style>
+    <script type="text/javascript">
+        // 将代码封装在spa名字空间内。
+        var spa = (function($) {
+            /*
+                在使用之前申明所有的变量。
+                把模块的配置值保存在configMap中，把模块的状态值保存在stateMap中。
+            */
+            // 设置常量
+            var configMap = {
+                    extended_height: 434, // 展开时的高度
+                    extended_title: '点击收缩',
+                    retracted_height: 16, // 收缩时的高度
+                    retracted_title: '点击展开',
+                    template_html: '<div class="spa-slider"><\/div>'
+                },
+                // 声明所有其他模块范围变量
+                $chatSlider, toggleSlider, onClickSlider, initModule;
+            // 聊天框高度交替方法
+            toggleSlider = function() {
+                var slider_height = $chatSlider.height();
+                // 如果缩回状态，则展开聊天框。
+                if (slider_height === configMap.retracted_height) {
+                    $chatSlider.animate({
+                            height: configMap.extended_height
+                        })
+                        .attr('title', configMap.extended_title);
+                    return true;
+                }
+                // 如果展开状态，则收缩聊天框。
+                if (slider_height === configMap.extended_height) {
+                    $chatSlider.animate({
+                            height: configMap.retracted_height
+                        })
+                        .attr('title', configMap.retracted_title);
+                    return true;
+                }
+                return false;
+            };
+            //把所有的事件处理程序聚集在一个区块中。
+            onClickSlider = function(event) {
+                toggleSlider();
+                return false;
+            };
+            /* 
+                把所有的公开方法聚集在一个区块中。
+                设置初始状态和提供的功能
+            */
+            initModule = function($container) {
+                // 渲染HTML
+                $container.html(configMap.template_html);
+                /*  
+                    查找聊天框div,把它保存到模块租用域变量$chatSlider中，
+                    模块作用域变量对spa名字空间内的所有函数可见
+                */
+                $chatSlider = $container.find('.spa-slider');
+                // 设置聊天框的标题，并在上面绑定点击事件处理程序：onClickSlider
+                $chatSlider.attr('title', configMap.retracted_title)
+                    .click(onClickSlider);
+                return true;
+            };
+            /*
+                通过返回spa名字空间中的对象，导出公开方法。
+            */
+            return {
+                initModule: initModule
+            };
+        }(jQuery));
+
+        // 仅在DOM可用后，使用jQuery的ready方法，启动单页应用
+        jQuery(document).ready(function() {
+            spa.initModule(jQuery('#spa'));
+        });
+    </script>
+</head>
+
+<body>
+    <div id="spa">
+
+    </div>
+</body>
+
+</html>
