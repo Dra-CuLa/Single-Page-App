@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <script type="text/javascript">
+        // 1、全局变量与局部变量
+        var _golbal = 'I am global !';
+        function local(){
+            var _local = 'I am local !';
+        }
+
+        //console.log(_golbal);   //  输出：I am global !
+        //console.log(_local);    //  输出：Uncaught ReferenceError: _local is not defined 
+
+        // 2、函数内部未申明var关键字的变量函数外部是“全部变量”
+        function person(){
+            var name = 'Tom';
+            age = '25';
+            console.log(name);    
+        }
+        //person();           //  Tom 
+        //console.log(age);   //  25
+
+        // 3、为申明var关键字的陷阱
+        // 错误的写法
+        function fish(){
+            for(i=0;i<5;i++){
+
+            }
+        }
+        fish();
+        console.log(i);     // 5
+        
+        // 可运行的写法
+        function cat(){
+            for(var j=0;j<10;j++){
+
+            }
+        }
+        cat();
+        console.log(j);     //  j is not defined
+
+         // 最优的写法
+         function lion(){
+            var j;
+            for(x=0;x<10;x++){
+
+            }
+        }
+        lion();
+        console.log(x);     //  x is not defined
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
